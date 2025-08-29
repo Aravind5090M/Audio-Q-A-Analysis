@@ -1,8 +1,10 @@
+pysqlite3-binary
 streamlit
 streamlit-webrtc
+numpy
+av
 requests
 python-dotenv
 crewai
 langchain-openai
-numpy
-av
+wave
