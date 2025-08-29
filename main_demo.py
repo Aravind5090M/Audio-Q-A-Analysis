@@ -134,13 +134,45 @@ def process_answer_with_crewai(openai_api_key, question, answer, language_code):
         return "No answer was provided to process."
     try:
         llm = ChatOpenAI(api_key=openai_api_key, model_name="gpt-4o", temperature=0.2)
-        translator_agent = Agent(role='Expert Language Translator', goal=f'Translate the given text accurately from {language_code} to English. If already English (en), return original text.', backstory='Skilled translator ensuring fluent, accurate translations.', verbose=False, llm=llm, allow_delegation=False)
-        analyzer_agent = Agent(role='Answer Relevance Analyzer', goal='Analyze the translated ENGLISH text for relevance to the question and identify key points.', backstory='Expert in linguistic analysis skilled at evaluating relevance.', verbose=False, llm=llm, allow_delegation=False)
-        summarizer_agent = Agent(role='Concise Summarizer', goal='Summarize the key points of the ENGLISH answer into a clear, two-sentence format.', backstory='Professional editor talented at distilling information.', verbose=False, llm=llm, allow_delegation=False)
-        translation_task = Task(description=f"Source language is '{language_code}'. Translate to English: '{answer}'. If 'en', output original text.", expected_output="The accurate English translation.", agent=translator_agent)
-        analysis_task = Task(description=f"Analyze this ENGLISH answer for the question: '{question}'. Is it relevant? Extract main points.", expected_output="Key points and a conclusion on relevance.", agent=analyzer_agent, context=[translation_task])
-        summary_task = Task(description="Based on the analysis, create a concise, two-sentence summary of the user's response.", expected_output="A final, polished summary.", agent=summarizer_agent, context=[analysis_task])
-        qa_crew = Crew(agents=[translator_agent, analyzer_agent, summarizer_agent], tasks=[translation_task, analysis_task, summary_task], process=Process.sequential)
+        translator_agent = Agent(
+            role='Expert Language Translator',
+            goal=f'Translate the given text accurately from {language_code} to English. If already English (en), return original text.', 
+            backstory='Skilled translator ensuring fluent, accurate translations.', 
+            verbose=False, 
+            llm=llm, 
+            allow_delegation=False)
+        analyzer_agent = Agent(
+            role='Answer Relevance Analyzer',
+            goal='Analyze the translated ENGLISH text for relevance to the question and identify key points.', 
+            backstory='Expert in linguistic analysis skilled at evaluating relevance.', 
+            verbose=False, 
+            llm=llm, 
+            allow_delegation=False)
+        summarizer_agent = Agent(
+            role='Concise Summarizer',
+            goal='Summarize the key points of the ENGLISH answer into a clear, two-sentence format.',
+            backstory='Professional editor talented at distilling information.',
+            verbose=False,
+            llm=llm,
+            allow_delegation=False)
+        translation_task = Task(
+            description=f"Source language is '{language_code}'. Translate to English: '{answer}'. If 'en', output original text.",
+            expected_output="The accurate English translation.", 
+            agent=translator_agent)
+        analysis_task = Task(
+            description=f"Analyze this ENGLISH answer for the question: '{question}'. Is it relevant? Extract main points.",
+            expected_output="Key points and a conclusion on relevance.",
+            agent=analyzer_agent,
+            context=[translation_task])
+        summary_task = Task(
+            description="Based on the analysis, create a concise, two-sentence summary of the user's response.",
+            expected_output="A final, polished summary.",
+            agent=summarizer_agent,
+            context=[analysis_task])
+        qa_crew = Crew(
+            agents=[translator_agent, analyzer_agent, summarizer_agent],
+            tasks=[translation_task, analysis_task, summary_task],
+            process=Process.sequential)
         return qa_crew.kickoff()
     except Exception as e:
         st.error(f"An error occurred during CrewAI processing: {e}")
@@ -165,8 +197,8 @@ QUESTIONS = [
 # --- Sidebar and State Initialization ---
 with st.sidebar:
     st.header("🔑 API Configuration")
-    assemblyai_api_key = st.text_input("AI API Key", type="password", value=os.getenv("ASSEMBLYAI_API_KEY") or "")
-    openai_api_key = st.text_input("OpenAI API Key", type="password", value=os.getenv("OPENAI_API_KEY") or "")
+    assemblyai_api_key = st.text_input("AI API Key", type="password", value=st.secrets.get("ASSEMBLYAI_API_KEY", ""))
+    openai_api_key = st.text_input("OpenAI API Key", type="password", value=st.secrets.get("OPENAI_API_KEY", ""))
     st.markdown("---")
     
 # Initialize session state for non-linear flow
