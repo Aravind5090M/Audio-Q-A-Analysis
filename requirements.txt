@@ -1,8 +1,5 @@
 # requirements.txt - Final attempt on Streamlit Cloud
-
---python-version 3.12
 pysqlite3-binary
-
 crewai
 langchain-openai
 streamlit
