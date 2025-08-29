@@ -1,0 +1,8 @@
+streamlit
+streamlit-webrtc
+requests
+python-dotenv
+crewai
+langchain-openai
+numpy
+av
