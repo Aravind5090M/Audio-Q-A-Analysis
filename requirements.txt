@@ -1,6 +1,5 @@
-crewai==0.35.9
-chromadb==0.4.24
-
+pysqlite3-binary
+crewai
 streamlit
 streamlit-webrtc
 numpy
@@ -8,4 +7,3 @@ av
 requests
 python-dotenv
 langchain-openai
-wave
