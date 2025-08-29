@@ -1,9 +1,10 @@
-#--python-version 3.12
+# requirements.txt - Final attempt on Streamlit Cloud
 
-crewai==0.35.8
-chromadb==0.4.24
-langchain-openai==0.1.0
+--python-version 3.12
+pysqlite3-binary
 
+crewai
+langchain-openai
 streamlit
 streamlit-webrtc
 numpy
